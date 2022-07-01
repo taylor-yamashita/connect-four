@@ -1,0 +1,25 @@
+body {
+    
+}
+
+#title {
+    text-align: center;
+}
+
+#main {
+    display: grid;
+}
+
+#instructions {
+    grid-area: 2 / 6 / 2 / 6;
+}
+
+#start-game {
+    grid-area: 3 / 6 / 3 / 6;
+
+}
+
+#game-board {
+    grid-area: 4 / 2 / 5 / 5;
+
+}
