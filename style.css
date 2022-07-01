@@ -35,4 +35,20 @@ button:hover {
     height: 500px;
     background-color: darkseagreen;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: inline-block;
+    /* width: 10%;
+    justify-content: space-around;
+    display: flex; 
+    flex-direction: column; */
+}
+
+.col {
+    width: 10%;
+    display: inline-block;
+    text-align: center;
 }
