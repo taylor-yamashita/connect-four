@@ -1,25 +1,28 @@
-body {
+/* body {
     
-}
+} */
 
 #title {
     text-align: center;
 }
 
 #main {
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* #instructions, #start-game, #game-board {
+} */
+
 #instructions {
-    grid-area: 2 / 6 / 2 / 6;
+    flex: 20%;
 }
 
 #start-game {
-    grid-area: 3 / 6 / 3 / 6;
-
+    flex: 20%;
 }
 
 #game-board {
-    grid-area: 4 / 2 / 5 / 5;
-
+    flex: 50%;   
 }
