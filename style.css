@@ -15,13 +15,22 @@
 /* #instructions, #start-game, #game-board {
 } */
 
-#instructions {
+button {
+    border: none;
+    margin: 10px;
+    padding: 10px;
+    background-color: slategray;
+    color: white;
+    border-radius: 10px;
+}
+
+/* #instructions {
     flex: 20%;
 }
 
 #start-game {
     flex: 20%;
-}
+} */
 
 #game-board {
     flex: 50%;   
