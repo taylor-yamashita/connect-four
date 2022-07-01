@@ -14,9 +14,6 @@ header {
     align-items: center;
 }
 
-/* #instructions, #start-game, #game-board {
-} */
-
 button {
     border: none;
     margin: 10px;
@@ -32,14 +29,10 @@ button:hover {
     border: solid 1px steelblue;
 }
 
-/* #instructions {
-    flex: 20%;
-}
-
-#start-game {
-    flex: 20%;
-} */
-
 #game-board {
-    flex: 50%;   
+    margin: 30px;
+    width: 600px;
+    height: 500px;
+    background-color: darkseagreen;
+    border-radius: 20px;
 }
