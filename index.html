@@ -16,7 +16,8 @@
             <form id="instructions" method="get" action="https://www.fgbradleys.com/rules/Connect%20Four.pdf" target="_blank">
                 <input type="submit" value="How to Play">
             </form> 
-            <button id="start-game">Start Game</button>
+            <button id="startBtn">Start Game</button>
+            <button id="quitBtn" class="hidden">Quit Game</button>
             <div id="game-board">
             </div>
         </div>
@@ -26,7 +27,8 @@
 
         <script>
             initializeBoard();
-            document.getElementById("start-game").addEventListener("click", startGame);
+            document.getElementById("startBtn").addEventListener("click", startGame);
+            document.getElementById("quitBtn").addEventListener("click", quitGame);
         </script>
     </body>     
 </html>

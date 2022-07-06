@@ -8,6 +8,11 @@ header {
     text-align: center;
 }
 
+/* hide elements as needed */
+.hidden {
+    display: none;
+  }
+
 #main {
     display: flex;
     flex-direction: column;
