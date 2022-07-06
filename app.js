@@ -1,5 +1,6 @@
 // global variables
 let inGame = false;
+let player1Turn = true;
 
 // gameplay functions
 function initializeBoard() {
@@ -18,8 +19,30 @@ function startGame() {
     inGame = true;
 
     // swap start and quit game buttons
-    document.getElementById("startBtn").classList.add("hidden");
-    document.getElementById("quitBtn").classList.remove("hidden");
+    document.getElementById("start-btn").classList.add("hidden");
+    document.getElementById("quit-btn").classList.remove("hidden");
+
+    // show turn indicator
+    document.getElementById("turn-display").classList.remove("hidden");
+
+    turn();
+}
+
+function turn() {
+    if (player1Turn) {
+        document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
+        document.getElementById("p2-turn-dot").style.backgroundColor = "white";
+    } else {
+        document.getElementById("p1-turn-dot").style.backgroundColor = "white";
+        document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
+    }
+
+    // switch turn
+    if (player1Turn) {
+        player1Turn = false;
+    } else {
+        player1Turn = true;
+    }
 }
 
 function quitGame() {
@@ -27,12 +50,17 @@ function quitGame() {
     inGame = false;
 
     // swap start and quit game buttons
-    document.getElementById("quitBtn").classList.add("hidden");
-    document.getElementById("startBtn").classList.remove("hidden");
+    document.getElementById("quit-btn").classList.add("hidden");
+    document.getElementById("start-btn").classList.remove("hidden");
+
+    // hide turn indicator
+    document.getElementById("turn-display").classList.add("hidden");
 }
 
 const colClicked = (col) => {
     if (inGame) {
         console.log("col " + col + " clicked");
     }
+
+
 }

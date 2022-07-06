@@ -13,11 +13,27 @@
         </header>
 
         <div id="main">
-            <form id="instructions" method="get" action="https://www.fgbradleys.com/rules/Connect%20Four.pdf" target="_blank">
-                <input type="submit" value="How to Play">
-            </form> 
-            <button id="startBtn">Start Game</button>
-            <button id="quitBtn" class="hidden">Quit Game</button>
+            
+            <div id="main-btns"> 
+            
+                <form id="instructions" method="get" action="https://www.fgbradleys.com/rules/Connect%20Four.pdf" target="_blank">
+                    <input type="submit" value="How to Play">
+                </form> 
+                <button id="start-btn">Start Game</button>
+                <button id="quit-btn" class="hidden">Quit Game</button>
+
+                <div id="turn-display" class="hidden">
+                    <div>
+                        <div id="p1-turn-dot" class="p1-turn"></div>
+                        <div class="p1-turn">Player 1</div>
+                    </div>
+                    <div>
+                        <div id="p2-turn-dot" class="p2-turn"></div>
+                        <div class="p2-turn">Player 2</div>
+                    </div>
+                </div>
+            </div>
+
             <div id="game-board">
             </div>
         </div>
@@ -27,8 +43,8 @@
 
         <script>
             initializeBoard();
-            document.getElementById("startBtn").addEventListener("click", startGame);
-            document.getElementById("quitBtn").addEventListener("click", quitGame);
+            document.getElementById("start-btn").addEventListener("click", startGame);
+            document.getElementById("quit-btn").addEventListener("click", quitGame);
         </script>
     </body>     
 </html>
