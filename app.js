@@ -8,3 +8,8 @@ function initializeBoard() {
         }
     }
 }
+
+function startGame() {
+    console.log("inside start game function")
+}
+
