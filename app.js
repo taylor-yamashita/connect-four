@@ -48,40 +48,22 @@ function turn() {
 
 const colClicked = (col) => {
     if (inGame) {
-        console.log("col " + col + " clicked");
-    }
-
-    const loop = async () => {
-        for (let j = 0; j < 6; j++) {
-            const cell = document.getElementById(`cell-${col}-${j}`);
-            // set cells to correct color
-            if (player1Turn) {
-                cell.style.backgroundColor = "palevioletred";
-            } else {
-                cell.style.backgroundColor = "yellow";
+        const loop = async () => {
+            for (let j = 0; j < 6; j++) {
+                const cell = document.getElementById(`cell-${col}-${j}`);
+                // set cells to correct color
+                if (player1Turn) {
+                    cell.style.backgroundColor = "palevioletred";
+                } else {
+                    cell.style.backgroundColor = "yellow";
+                }
+                // sleep, then reset background color
+                await new Promise(resolve => setTimeout(resolve, 110))
+                cell.style.backgroundColor = "darkseagreen";
             }
-            // sleep, then reset background color
-            await new Promise(resolve => setTimeout(resolve, 100))
-            cell.style.backgroundColor = "darkseagreen";
         }
-        
+        loop();
     }
-
-    loop();
-
-    // for (let j = 0; j < 6; j++) {
-    //     cell = document.getElementById(`cell-${col}-${j}`);
-    //     console.log(cell);
-    //     // set cells to correct color
-    //     if (player1Turn) {
-    //         cell.style.backgroundColor = "palevioletred";
-    //     } else {
-    //         cell.style.backgroundColor = "yellow";
-    //     }
-    //     // await wait(2000);
-    //     // setTimeout(() => { }, 1000);
-    //     cell.style.backgroundColor = "darkseagreen";
-    // }
 }
 
 function quitGame() {
