@@ -1,11 +1,13 @@
 // global variables
 let inGame = false;
 let player1Turn = true;
+let playerClicked = false;
 
 // gameplay functions
 function initializeBoard() {
     for (let i = 0; i < 7; i++) {
-        document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="colClicked(${i})"></div>`;
+        // document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="colClicked(${i})"></div>`;
+        document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}"></div>`;
     }
     for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 6; j++) {
@@ -15,8 +17,10 @@ function initializeBoard() {
 }
 
 function startGame() {
-    // set global variables
+    // set global variables for new game
     inGame = true;
+    player1Turn = true;
+    playerClicked = false;
 
     // swap start and quit game buttons
     document.getElementById("start-btn").classList.add("hidden");
@@ -25,10 +29,25 @@ function startGame() {
     // show turn indicator
     document.getElementById("turn-display").classList.remove("hidden");
 
-    turn();
+    // run game - loop repeating turn() while ingame i.e. while neither player has won yet
+   
+    // while (inGame) {
+    //     turn();
+    //     // check win logic every turn
+    // }
+
+    for (let i = 0; i < 4; i++) {
+        console.log(i);
+        if (!playerClicked) {
+            turn();
+        }
+    }
+
+    // exit loop, handle game end
 }
 
 function turn() {
+    console.log('turn');
     // show which player is taking turn
     if (player1Turn) {
         document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
@@ -38,16 +57,32 @@ function turn() {
         document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
     }
 
-    // // switch turn
-    // if (player1Turn) {
-    //     player1Turn = false;
-    // } else {
-    //     player1Turn = true;
-    // }
+    for (let i = 0; i < 7; i++) {
+        document.getElementById(`col-${i}`).onclick = () => colClicked(i);
+    }
+
+    switchTurn();
+}
+
+// switch turn - update globals
+function switchTurn() {
+    if (player1Turn && playerClicked) {
+        player1Turn = false;
+    } else if (!player1Turn && playerClicked) {
+        player1Turn = true;
+    }
+    console.log('switch');
+    playerClicked = false;
+    console.log(player1Turn);
+    console.log(playerClicked);
 }
 
 const colClicked = (col) => {
+    console.log('clicked');
     if (inGame) {
+        playerClicked = true;
+        
+        // piece drop animation
         const loop = async () => {
             for (let j = 0; j < 6; j++) {
                 const cell = document.getElementById(`cell-${col}-${j}`);
@@ -63,6 +98,11 @@ const colClicked = (col) => {
             }
         }
         loop();
+
+        // remove onclick listeners from columns 
+        for (let i = 0; i < 7; i++) {
+            document.getElementById(`col-${i}`).onclick = null;
+        }
     }
 }
 
