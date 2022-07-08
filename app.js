@@ -1,13 +1,13 @@
 // global variables
 let inGame = false;
-let player1Turn = true;
+let playerWon = false;
+let currentPlayer = 1;
 let playerClicked = false;
 
 // gameplay functions
 function initializeBoard() {
     for (let i = 0; i < 7; i++) {
-        // document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="colClicked(${i})"></div>`;
-        document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}"></div>`;
+        document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="colClicked(${i})"></div>`;
     }
     for (let i = 0; i < 7; i++) {
         for (let j = 0; j < 6; j++) {
@@ -19,7 +19,7 @@ function initializeBoard() {
 function startGame() {
     // set global variables for new game
     inGame = true;
-    player1Turn = true;
+    currentPlayer = 1;
     playerClicked = false;
 
     // swap start and quit game buttons
@@ -33,61 +33,46 @@ function startGame() {
    
     // while (inGame) {
     //     turn();
-    //     // check win logic every turn
+    //     if (!playerClicked) {     
+    //         turn();
+    //     }
+
+    //     // *** NEED TO WAIT HERE ***
+
+    //     //  check win logic every turn
+    //     if (playerWon) { break; }
     // }
 
-    for (let i = 0; i < 4; i++) {
-        console.log(i);
-        if (!playerClicked) {
-            turn();
-        }
-    }
-
-    // exit loop, handle game end
+    // handle game end
 }
 
-function turn() {
-    console.log('turn');
-    // show which player is taking turn
-    if (player1Turn) {
-        document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
-        document.getElementById("p2-turn-dot").style.backgroundColor = "white";
-    } else {
-        document.getElementById("p1-turn-dot").style.backgroundColor = "white";
-        document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
-    }
-
-    for (let i = 0; i < 7; i++) {
-        document.getElementById(`col-${i}`).onclick = () => colClicked(i);
-    }
-
-    switchTurn();
-}
-
-// switch turn - update globals
-function switchTurn() {
-    if (player1Turn && playerClicked) {
-        player1Turn = false;
-    } else if (!player1Turn && playerClicked) {
-        player1Turn = true;
-    }
-    console.log('switch');
-    playerClicked = false;
-    console.log(player1Turn);
-    console.log(playerClicked);
-}
+// function turn() {
+//     // console.log('turn');
+    
+//     // update turn indicator
+//     if (currentPlayer === 1) {
+//         document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
+//         document.getElementById("p2-turn-dot").style.backgroundColor = "white";
+//     } else {
+//         document.getElementById("p1-turn-dot").style.backgroundColor = "white";
+//         document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
+//     }
+    
+//     // *** NEED TO WAIT HERE ***
+// }
 
 const colClicked = (col) => {
-    console.log('clicked');
     if (inGame) {
+
         playerClicked = true;
-        
+
         // piece drop animation
         const loop = async () => {
+            let localCurrentPlayer = currentPlayer;
             for (let j = 0; j < 6; j++) {
                 const cell = document.getElementById(`cell-${col}-${j}`);
                 // set cells to correct color
-                if (player1Turn) {
+                if (localCurrentPlayer === 1) {
                     cell.style.backgroundColor = "palevioletred";
                 } else {
                     cell.style.backgroundColor = "yellow";
@@ -99,9 +84,20 @@ const colClicked = (col) => {
         }
         loop();
 
-        // remove onclick listeners from columns 
-        for (let i = 0; i < 7; i++) {
-            document.getElementById(`col-${i}`).onclick = null;
+        // switch turns
+        if (currentPlayer === 1) {
+            currentPlayer = 2;
+        } else {
+            currentPlayer = 1;
+        }
+
+        // update turn indicator
+        if (currentPlayer === 1) {
+            document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
+            document.getElementById("p2-turn-dot").style.backgroundColor = "white";
+        } else {
+            document.getElementById("p1-turn-dot").style.backgroundColor = "white";
+            document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
         }
     }
 }
