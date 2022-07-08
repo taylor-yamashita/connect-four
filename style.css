@@ -42,7 +42,7 @@ button:hover, input:hover {
 
 /* turn indicator styling */
 
-#turn-display {
+#current-player-display {
     border: solid 1px steelblue;
     margin: 10px;
     padding: 10px; 

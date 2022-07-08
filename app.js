@@ -2,7 +2,6 @@
 let inGame = false;
 let playerWon = false;
 let currentPlayer = 1;
-let playerClicked = false;
 
 // gameplay functions
 function initializeBoard() {
@@ -26,40 +25,9 @@ function startGame() {
     document.getElementById("start-btn").classList.add("hidden");
     document.getElementById("quit-btn").classList.remove("hidden");
 
-    // show turn indicator
-    document.getElementById("turn-display").classList.remove("hidden");
-
-    // run game - loop repeating turn() while ingame i.e. while neither player has won yet
-   
-    // while (inGame) {
-    //     turn();
-    //     if (!playerClicked) {     
-    //         turn();
-    //     }
-
-    //     // *** NEED TO WAIT HERE ***
-
-    //     //  check win logic every turn
-    //     if (playerWon) { break; }
-    // }
-
-    // handle game end
+    // show current player
+    document.getElementById("current-player-display").classList.remove("hidden");
 }
-
-// function turn() {
-//     // console.log('turn');
-    
-//     // update turn indicator
-//     if (currentPlayer === 1) {
-//         document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
-//         document.getElementById("p2-turn-dot").style.backgroundColor = "white";
-//     } else {
-//         document.getElementById("p1-turn-dot").style.backgroundColor = "white";
-//         document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
-//     }
-    
-//     // *** NEED TO WAIT HERE ***
-// }
 
 const colClicked = (col) => {
     if (inGame) {
@@ -84,14 +52,14 @@ const colClicked = (col) => {
         }
         loop();
 
-        // switch turns
+        // switch current player
         if (currentPlayer === 1) {
             currentPlayer = 2;
         } else {
             currentPlayer = 1;
         }
 
-        // update turn indicator
+        // update current player
         if (currentPlayer === 1) {
             document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
             document.getElementById("p2-turn-dot").style.backgroundColor = "white";
@@ -110,8 +78,8 @@ function quitGame() {
     document.getElementById("quit-btn").classList.add("hidden");
     document.getElementById("start-btn").classList.remove("hidden");
 
-    // hide turn indicator
-    document.getElementById("turn-display").classList.add("hidden");
+    // hide current player
+    document.getElementById("current-player-display").classList.add("hidden");
 }
 
 
