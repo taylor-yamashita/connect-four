@@ -2,20 +2,27 @@
 let inGame = false;
 let playerWon = false;
 let currentPlayer = 1;
+let gameBoard = []; 
 
+// global constants
+let maxCols = 7;
+let maxRows = 6;
+
+// called upon page load
 function initializeBoard() {
     // create columns
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < maxCols; i++) {
         document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="playerMove(${i})"></div>`;
     }
     // create board cells within columns
-    for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < 6; j++) {
+    for (let i = 0; i < maxCols; i++) {
+        for (let j = 0; j < maxRows; j++) {
             document.getElementById(`col-${i}`).innerHTML += `<div class="cell" id="cell-${i}-${j}"></div>`;
         }
     }
 }
 
+// called when start button is clicked 
 function startGame() {
     // set global variables for new game
     inGame = true;
@@ -27,8 +34,17 @@ function startGame() {
 
     // show current player display
     document.getElementById("player-display").classList.remove("hidden");
+
+    // initialize empty game board double array
+    for (let i = 0; i < maxCols; i++) {
+        gameBoard[i] = [];
+        for (let j = 0; j < maxRows; j++) {
+            gameBoard[i][j] = null;
+        }
+    }
 }
 
+// called when quit button is clicked
 function quitGame() {
     // set global variables
     inGame = false;
@@ -41,12 +57,13 @@ function quitGame() {
     document.getElementById("player-display").classList.add("hidden");
 }
 
+// called when board is clicked during game
 const playerMove = (col) => {
     if (inGame) {
-        // piece drop animation
+        // piece drop animation (colored based on current player)
         const loop = async () => {
             let localCurrentPlayer = currentPlayer;
-            for (let j = 0; j < 6; j++) {
+            for (let j = 0; j < maxRows; j++) {
                 const cell = document.getElementById(`cell-${col}-${j}`);
                 // set cells to correct color
                 if (localCurrentPlayer === 1) {
@@ -60,6 +77,8 @@ const playerMove = (col) => {
             }
         }
         loop();
+
+        // update board array
 
         // switch current player
         if (currentPlayer === 1) {
