@@ -40,9 +40,9 @@ button:hover, input:hover {
     border: solid 1px steelblue;
 }
 
-/* turn indicator styling */
+/* current player indicator styling */
 
-#current-player-display {
+#player-display {
     border: solid 1px steelblue;
     margin: 10px;
     padding: 10px; 
