@@ -1,12 +1,13 @@
+// global constants
+let maxCols = 7;
+let maxRows = 6;
+
 // global variables
 let inGame = false;
 let playerWon = false;
 let currentPlayer = 1;
 let gameBoard = []; 
-
-// global constants
-let maxCols = 7;
-let maxRows = 6;
+let colsFull = [];
 
 // called upon page load
 const initializeBoard = () => {
@@ -19,7 +20,7 @@ const initializeBoard = () => {
         for (let j = 0; j < maxRows; j++) {
             document.getElementById(`col-${i}`).innerHTML += `<div class="cell" id="cell-${i}-${j}"></div>`;
         }
-    }
+    } 
 }
 
 // called when start button is clicked 
@@ -35,8 +36,10 @@ const startGame = () => {
     // show current player display
     document.getElementById("player-display").classList.remove("hidden");
 
-    // initialize empty game board double array
+    // initialize empty game board double array and array tracking full cols
     for (let i = 0; i < maxCols; i++) {
+        colsFull[i] = false;
+        
         gameBoard[i] = [];
         for (let j = 0; j < maxRows; j++) {
             gameBoard[i][j] = null;
@@ -59,7 +62,7 @@ const quitGame = () => {
 
 // called when board is clicked during game
 const playerMove = (col) => {
-    if (inGame) {
+    if (inGame && colsFull[col] === false) {
         // piece drop animation (colored based on current player)
         const loop = async () => {
             let localCurrentPlayer = currentPlayer;
@@ -79,7 +82,8 @@ const playerMove = (col) => {
         loop();
 
         // update board array
-
+        let openIndex = openCell(col);
+        console.log(openIndex);
 
         // switch current player
         if (currentPlayer === 1) {
@@ -99,4 +103,28 @@ const playerMove = (col) => {
 
         // check for player win; if win, handle end game
     }
+}
+
+// called when players make moves. takes col index and returns next open board cell in that column. 
+const openCell = (col) => {
+    let cell = gameBoard[col][0];
+    let openIndex = 0;
+    for (let i = 0; i < maxRows; i++) {
+        cell = gameBoard[col][i];
+        if (cell === null) {
+            openIndex = i;
+        }
+    }
+
+    // check if col is full
+    if (openIndex === 0 && colsFull[col] === false) {
+        colsFull[col] = true;
+    }
+    
+    // if col not full, fill board cell with "1" or "2" to track play
+    if (colsFull[col] === false) {
+        gameBoard[col][openIndex] = currentPlayer;
+    }
+
+    return openIndex;
 }
