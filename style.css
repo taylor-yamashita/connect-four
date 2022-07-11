@@ -96,4 +96,5 @@ button:hover, input:hover {
     border: solid 1px white;
     border-radius: 100%;
     color: white;
+    background-color: darkseagreen;
 }

@@ -58,34 +58,47 @@ const quitGame = () => {
 
     // hide current player display
     document.getElementById("player-display").classList.add("hidden");
+
+    // reset board
+    // need to reset board cells to darkseagreen
 }
 
 // called when board is clicked during game
 const playerMove = (col) => {
     if (inGame && colsFull[col] === false) {
-        // piece drop animation (colored based on current player)
+        // update board back end
+        let openIndex = openCell(col);
+
+        // piece drop animation
         const loop = async () => {
             let localCurrentPlayer = currentPlayer;
             for (let j = 0; j < maxRows; j++) {
                 const cell = document.getElementById(`cell-${col}-${j}`);
-                // set cells to correct color
-                if (localCurrentPlayer === 1) {
-                    cell.style.backgroundColor = "palevioletred";
-                } else {
-                    cell.style.backgroundColor = "yellow";
-                }
-                // sleep, then reset background color
-                await new Promise(resolve => setTimeout(resolve, 110))
-                cell.style.backgroundColor = "darkseagreen";
+                if (gameBoard[col][j] === null) {
+                    // set cells to correct color
+                    if (localCurrentPlayer === 1) {
+                        cell.style.backgroundColor = "palevioletred";
+                    } else {
+                        cell.style.backgroundColor = "yellow";
+                    }
+                    if (j !== openIndex) {
+                        // sleep, then reset background color
+                        await new Promise(resolve => setTimeout(resolve, 110))
+                        cell.style.backgroundColor = "darkseagreen";
+                    }
+                }   
+            }
+            // update board front end
+            let openCell = document.getElementById(`cell-${col}-${openIndex}`);
+            if (localCurrentPlayer === 1) {
+                openCell.style.backgroundColor = "palevioletred";
+            } else {
+                openCell.style.backgroundColor = "yellow";
             }
         }
         loop();
 
-        // update board array
-        let openIndex = openCell(col);
-        console.log(openIndex);
-
-        // switch current player
+        // switch current player 
         if (currentPlayer === 1) {
             currentPlayer = 2;
         } else {
@@ -94,11 +107,11 @@ const playerMove = (col) => {
 
         // update current player display
         if (currentPlayer === 1) {
-            document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
-            document.getElementById("p2-turn-dot").style.backgroundColor = "white";
+            document.getElementById("p1-turn-dot").classList.remove("hidden");
+            document.getElementById("p2-turn-dot").classList.add("hidden");
         } else {
-            document.getElementById("p1-turn-dot").style.backgroundColor = "white";
-            document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
+            document.getElementById("p1-turn-dot").classList.add("hidden");
+            document.getElementById("p2-turn-dot").classList.remove("hidden");
         }
 
         // check for player win; if win, handle end game
@@ -107,11 +120,11 @@ const playerMove = (col) => {
 
 // called when players make moves. takes col index and returns next open board cell in that column. 
 const openCell = (col) => {
-    let cell = gameBoard[col][0];
+    let currCell = gameBoard[col][0];
     let openIndex = 0;
     for (let i = 0; i < maxRows; i++) {
-        cell = gameBoard[col][i];
-        if (cell === null) {
+        currCell = gameBoard[col][i];
+        if (currCell === null) {
             openIndex = i;
         }
     }
@@ -126,5 +139,14 @@ const openCell = (col) => {
         gameBoard[col][openIndex] = currentPlayer;
     }
 
+    // update front end to reflect current board
+    // let openCell = document.getElementById(`cell-${col}-${openIndex}`);
+    // if (currentPlayer === 1) {
+    //     openCell.style.backgroundColor = "palevioletred";
+    // } else {
+    //     openCell.style.backgroundColor = "yellow";
+    // }
+
     return openIndex;
+    
 }
