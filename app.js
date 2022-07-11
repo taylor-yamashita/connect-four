@@ -9,7 +9,7 @@ let maxCols = 7;
 let maxRows = 6;
 
 // called upon page load
-function initializeBoard() {
+const initializeBoard = () => {
     // create columns
     for (let i = 0; i < maxCols; i++) {
         document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="playerMove(${i})"></div>`;
@@ -23,7 +23,7 @@ function initializeBoard() {
 }
 
 // called when start button is clicked 
-function startGame() {
+const startGame = () => {
     // set global variables for new game
     inGame = true;
     currentPlayer = 1;
@@ -45,7 +45,7 @@ function startGame() {
 }
 
 // called when quit button is clicked
-function quitGame() {
+const quitGame = () => {
     // set global variables
     inGame = false;
 
@@ -79,6 +79,7 @@ const playerMove = (col) => {
         loop();
 
         // update board array
+
 
         // switch current player
         if (currentPlayer === 1) {
