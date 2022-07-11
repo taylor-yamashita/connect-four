@@ -63,7 +63,7 @@ button:hover, input:hover {
     background-color: palevioletred;
 }
 #p2-turn-dot {
-    background-color: yellow;
+    background-color: white;
 }
 
 /* game board styling */
@@ -96,5 +96,4 @@ button:hover, input:hover {
     border: solid 1px white;
     border-radius: 100%;
     color: white;
-    background-color: darkseagreen;
 }

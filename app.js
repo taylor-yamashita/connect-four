@@ -98,23 +98,23 @@ const playerMove = (col) => {
         }
         loop();
 
+        // update current player display
+        if (currentPlayer === 1) {
+            document.getElementById("p1-turn-dot").style.backgroundColor = "white";
+            document.getElementById("p2-turn-dot").style.backgroundColor = "yellow";
+        } else {
+            document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
+            document.getElementById("p2-turn-dot").style.backgroundColor = "white";
+        }
+
+        // check for player win; if win, handle end game
+
         // switch current player 
         if (currentPlayer === 1) {
             currentPlayer = 2;
         } else {
             currentPlayer = 1;
         }
-
-        // update current player display
-        if (currentPlayer === 1) {
-            document.getElementById("p1-turn-dot").classList.remove("hidden");
-            document.getElementById("p2-turn-dot").classList.add("hidden");
-        } else {
-            document.getElementById("p1-turn-dot").classList.add("hidden");
-            document.getElementById("p2-turn-dot").classList.remove("hidden");
-        }
-
-        // check for player win; if win, handle end game
     }
 }
 
@@ -138,14 +138,6 @@ const openCell = (col) => {
     if (colsFull[col] === false) {
         gameBoard[col][openIndex] = currentPlayer;
     }
-
-    // update front end to reflect current board
-    // let openCell = document.getElementById(`cell-${col}-${openIndex}`);
-    // if (currentPlayer === 1) {
-    //     openCell.style.backgroundColor = "palevioletred";
-    // } else {
-    //     openCell.style.backgroundColor = "yellow";
-    // }
 
     return openIndex;
     
