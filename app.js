@@ -120,7 +120,7 @@ const pieceDrop = async (col, openIndex) => {
         }   
     }
 
-    // permanently set filled cell to player color 
+    // set filled cell to player color 
     let currCell = document.getElementById(`cell-${col}-${openIndex}`);
     if (localCurrentPlayer === 1) {
         currCell.style.backgroundColor = "palevioletred";
@@ -148,19 +148,22 @@ const openCell = (col) => {
     return openIndex;
 }
 
-const checkForWin = () => {
+const checkForWin = async () => {
+    const localCurrentPlayer = currentPlayer;
+    
     // vertical win check
     for (let i = 0; i < maxCols; i++) {
         let consec = 0;
         for (let j = 0; j < maxRows; j++) {
-            if (gameBoard[i][j] === currentPlayer) {
+            if (gameBoard[i][j] === localCurrentPlayer) {
                 consec++;
             } else {
                 consec = 0;
             }
         }
         if (consec >= 4) {
-            alert("Congratulations! Player " + currentPlayer + " wins!");
+            await new Promise(resolve => setTimeout(resolve, 500))
+            alert("Congratulations! Player " + localCurrentPlayer + " wins!");
         }
     }
 
@@ -168,14 +171,15 @@ const checkForWin = () => {
     for (let j = 0; j < maxRows; j++) {
         let consec = 0;
         for (let i = 0; i < maxCols; i++) {
-            if (gameBoard[i][j] === currentPlayer) {
+            if (gameBoard[i][j] === localCurrentPlayer) {
                 consec++;
             } else {
                 consec = 0;
             }
         }
         if (consec >= 4) {
-            alert("Congratulations! Player " + currentPlayer + " wins!");
+            await new Promise(resolve => setTimeout(resolve, 500))
+            alert("Congratulations! Player " + localCurrentPlayer + " wins!");
         }
     }
 }
