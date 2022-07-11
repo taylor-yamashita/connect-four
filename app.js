@@ -87,6 +87,7 @@ const playerMove = (col) => {
         }
 
         // check for player win; if win, handle end game
+        checkForWin();
 
         // switch current player 
         if (currentPlayer === 1) {
@@ -145,4 +146,21 @@ const openCell = (col) => {
     }
 
     return openIndex;
+}
+
+const checkForWin = () => {
+    // vertical win check
+    for (let i = 0; i < maxCols; i++) {
+        let consec = 0;
+        for (let j = 0; j < maxRows; j++) {
+            if (gameBoard[i][j] === currentPlayer) {
+                consec++;
+            } else {
+                consec = 0;
+            }
+        }
+        if (consec >= 4) {
+            alert("Congratulations! Player " + currentPlayer + " wins!");
+        }
+    }
 }
