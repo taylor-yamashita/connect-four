@@ -153,33 +153,37 @@ const checkForWin = async () => {
     
     // vertical win check
     for (let i = 0; i < maxCols; i++) {
-        let consec = 0;
+        let vertConsec = 0;
         for (let j = 0; j < maxRows; j++) {
             if (gameBoard[i][j] === localCurrentPlayer) {
-                consec++;
+                vertConsec++;
             } else {
-                consec = 0;
+                vertConsec = 0;
             }
-        }
-        if (consec >= 4) {
-            await new Promise(resolve => setTimeout(resolve, 500))
-            alert("Congratulations! Player " + localCurrentPlayer + " wins!");
+            if (vertConsec >= 4) {
+                inGame = false;
+                await new Promise(resolve => setTimeout(resolve, 400))
+                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
+                quitGame();
+            }
         }
     }
 
     // horizontal win check
     for (let j = 0; j < maxRows; j++) {
-        let consec = 0;
+        let horizConsec = 0;
         for (let i = 0; i < maxCols; i++) {
             if (gameBoard[i][j] === localCurrentPlayer) {
-                consec++;
+                horizConsec++;
             } else {
-                consec = 0;
+                horizConsec = 0;
             }
-        }
-        if (consec >= 4) {
-            await new Promise(resolve => setTimeout(resolve, 500))
-            alert("Congratulations! Player " + localCurrentPlayer + " wins!");
+            if (horizConsec >= 4) {
+                inGame = false;
+                await new Promise(resolve => setTimeout(resolve, 700))
+                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
+                quitGame();
+            }
         }
     }
 }
