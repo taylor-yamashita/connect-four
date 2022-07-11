@@ -163,4 +163,19 @@ const checkForWin = () => {
             alert("Congratulations! Player " + currentPlayer + " wins!");
         }
     }
+
+    // horizontal win check
+    for (let j = 0; j < maxRows; j++) {
+        let consec = 0;
+        for (let i = 0; i < maxCols; i++) {
+            if (gameBoard[i][j] === currentPlayer) {
+                consec++;
+            } else {
+                consec = 0;
+            }
+        }
+        if (consec >= 4) {
+            alert("Congratulations! Player " + currentPlayer + " wins!");
+        }
+    }
 }
