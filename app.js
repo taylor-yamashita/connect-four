@@ -66,37 +66,16 @@ const quitGame = () => {
 // called when board is clicked during game
 const playerMove = (col) => {
     if (inGame && colsFull[col] === false) {
-        // update board back end
+        // get next open cell in column
         let openIndex = openCell(col);
+        
+        // update board front end
+        pieceDrop(col, openIndex);
 
-        // piece drop animation
-        const loop = async () => {
-            let localCurrentPlayer = currentPlayer;
-            for (let j = 0; j < maxRows; j++) {
-                const cell = document.getElementById(`cell-${col}-${j}`);
-                if (gameBoard[col][j] === null) {
-                    // set cells to correct color
-                    if (localCurrentPlayer === 1) {
-                        cell.style.backgroundColor = "palevioletred";
-                    } else {
-                        cell.style.backgroundColor = "yellow";
-                    }
-                    if (j !== openIndex) {
-                        // sleep, then reset background color
-                        await new Promise(resolve => setTimeout(resolve, 110))
-                        cell.style.backgroundColor = "darkseagreen";
-                    }
-                }   
-            }
-            // update board front end
-            let openCell = document.getElementById(`cell-${col}-${openIndex}`);
-            if (localCurrentPlayer === 1) {
-                openCell.style.backgroundColor = "palevioletred";
-            } else {
-                openCell.style.backgroundColor = "yellow";
-            }
+        // update board back end
+        if (colsFull[col] === false) {
+            gameBoard[col][openIndex] = currentPlayer;
         }
-        loop();
 
         // update current player display
         if (currentPlayer === 1) {
@@ -118,27 +97,52 @@ const playerMove = (col) => {
     }
 }
 
-// called when players make moves. takes col index and returns next open board cell in that column. 
+// player move helper: front end animation + filled board
+const pieceDrop = async (col, openIndex) => {
+    let localCurrentPlayer = currentPlayer;
+    
+    // piece drop animation
+    for (let j = 0; j < maxRows; j++) {
+        const cell = document.getElementById(`cell-${col}-${j}`);
+        if (gameBoard[col][j] === null) {
+            // set cells to correct color
+            if (localCurrentPlayer === 1) {
+                cell.style.backgroundColor = "palevioletred";
+            } else {
+                cell.style.backgroundColor = "yellow";
+            }
+            if (j !== openIndex) {
+                // sleep, then reset background color
+                await new Promise(resolve => setTimeout(resolve, 110))
+                cell.style.backgroundColor = "darkseagreen";
+            }
+        }   
+    }
+
+    // permanently set filled cell to player color 
+    let currCell = document.getElementById(`cell-${col}-${openIndex}`);
+    if (localCurrentPlayer === 1) {
+        currCell.style.backgroundColor = "palevioletred";
+    } else {
+        currCell.style.backgroundColor = "yellow";
+    }
+}
+
+// player move helper: takes col index and returns next open board cell in that column
 const openCell = (col) => {
-    let currCell = gameBoard[col][0];
+    let cell = gameBoard[col][0];
     let openIndex = 0;
     for (let i = 0; i < maxRows; i++) {
-        currCell = gameBoard[col][i];
-        if (currCell === null) {
+        cell = gameBoard[col][i];
+        if (cell === null) {
             openIndex = i;
         }
     }
 
-    // check if col is full
+    // if last piece in col was just placed, mark col as full
     if (openIndex === 0 && colsFull[col] === false) {
         colsFull[col] = true;
     }
-    
-    // if col not full, fill board cell with "1" or "2" to track play
-    if (colsFull[col] === false) {
-        gameBoard[col][openIndex] = currentPlayer;
-    }
 
     return openIndex;
-    
 }
