@@ -13,7 +13,7 @@ window.onload = () => {
     initializeBoard();
 }
 
-// called upon page load
+// set up after page load
 const initializeBoard = () => {
     // create columns
     for (let i = 0; i < maxCols; i++) {
@@ -25,28 +25,24 @@ const initializeBoard = () => {
             document.getElementById(`col-${i}`).innerHTML += `<div class="cell" id="cell-${i}-${j}"></div>`;
         }
     } 
-    // add button listeners
     document.getElementById("start-btn").addEventListener("click", startGame);
     document.getElementById("quit-btn").addEventListener("click", quitGame);
 }
 
-// called when start button is clicked 
+// begin a new game
 const startGame = () => {
-    // set global variables for new game
+    // set global variables
     inGame = true;
     currentPlayer = 1;
 
-    // swap start and quit game buttons
+    // update button display
     document.getElementById("start-btn").classList.add("hidden");
     document.getElementById("quit-btn").classList.remove("hidden");
-
-    // show current player display
     document.getElementById("player-display").classList.remove("hidden");
 
-    // initialize empty game board double array and array tracking full cols
+    // initialize empty game board double array and full column array
     for (let i = 0; i < maxCols; i++) {
         colsFull[i] = false;
-        
         gameBoard[i] = [];
         for (let j = 0; j < maxRows; j++) {
             gameBoard[i][j] = null;
@@ -54,26 +50,23 @@ const startGame = () => {
     }
 }
 
-// called when quit button is clicked
+// quit the game
 const quitGame = () => {
     // set global variables
     inGame = false;
 
-    // swap start and quit game buttons
+    // update button display
     document.getElementById("quit-btn").classList.add("hidden");
     document.getElementById("start-btn").classList.remove("hidden");
-
-    // hide current player display
     document.getElementById("player-display").classList.add("hidden");
 
     // reset board
     // need to reset board cells to darkseagreen
 }
 
-// called when board is clicked during game
+// take player turn
 const playerMove = (col) => {
     if (inGame && colsFull[col] === false) {
-        // get next open cell in column
         let openIndex = openCell(col);
         
         // update board front end
@@ -93,7 +86,7 @@ const playerMove = (col) => {
             document.getElementById("p2-turn-dot").style.backgroundColor = "white";
         }
 
-        // check for player win; if win, handle end game
+        // check for player win
         checkForWin();
 
         // switch current player 
@@ -105,10 +98,9 @@ const playerMove = (col) => {
     }
 }
 
-// player move helper: front end animation + filled board
+// handle front end during player turn
 const pieceDrop = async (col, openIndex) => {
     let localCurrentPlayer = currentPlayer;
-    
     // piece drop animation
     for (let j = 0; j < maxRows; j++) {
         const cell = document.getElementById(`cell-${col}-${j}`);
@@ -126,7 +118,6 @@ const pieceDrop = async (col, openIndex) => {
             }
         }   
     }
-
     // set filled cell to player color 
     let currCell = document.getElementById(`cell-${col}-${openIndex}`);
     if (localCurrentPlayer === 1) {
@@ -136,7 +127,7 @@ const pieceDrop = async (col, openIndex) => {
     }
 }
 
-// player move helper: takes col index and returns next open board cell in that column
+// return next open board cell in column, given column index
 const openCell = (col) => {
     let cell = gameBoard[col][0];
     let openIndex = 0;
@@ -146,19 +137,16 @@ const openCell = (col) => {
             openIndex = i;
         }
     }
-
     // if last piece in col was just placed, mark col as full
     if (openIndex === 0 && colsFull[col] === false) {
         colsFull[col] = true;
     }
-
     return openIndex;
 }
 
-// called after each player move
+// check win conditions
 const checkForWin = async () => {
     const localCurrentPlayer = currentPlayer;
-    
     // vertical win check
     for (let i = 0; i < maxCols; i++) {
         let vertConsec = 0;
@@ -176,7 +164,6 @@ const checkForWin = async () => {
             }
         }
     }
-
     // horizontal win check
     for (let j = 0; j < maxRows; j++) {
         let horizConsec = 0;
@@ -194,7 +181,6 @@ const checkForWin = async () => {
             }
         }
     }
-
     // diagonal win check
-    // there are six possible diagonals in each direction... twelve hard coded checks?
+    
 }
