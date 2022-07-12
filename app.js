@@ -13,7 +13,7 @@ window.onload = () => {
     initializeBoard();
 }
 
-// set up after page load
+// set up board and buttons after page load
 const initializeBoard = () => {
     // create columns
     for (let i = 0; i < maxCols; i++) {
@@ -61,7 +61,12 @@ const quitGame = () => {
     document.getElementById("player-display").classList.add("hidden");
 
     // reset board
-    // need to reset board cells to darkseagreen
+    for (let i = 0; i < maxCols; i++) {
+        for (let j = 0; j < maxRows; j++) {
+            let cell = document.getElementById(`cell-${i}-${j}`);
+            cell.style.backgroundColor = "darkseagreen";
+        }
+    } 
 }
 
 // take player turn
