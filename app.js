@@ -9,6 +9,10 @@ let currentPlayer = 1;
 let gameBoard = []; 
 let colsFull = [];
 
+window.onload = () => {
+    initializeBoard();
+}
+
 // called upon page load
 const initializeBoard = () => {
     // create columns
@@ -21,6 +25,9 @@ const initializeBoard = () => {
             document.getElementById(`col-${i}`).innerHTML += `<div class="cell" id="cell-${i}-${j}"></div>`;
         }
     } 
+    // add button listeners
+    document.getElementById("start-btn").addEventListener("click", startGame);
+    document.getElementById("quit-btn").addEventListener("click", quitGame);
 }
 
 // called when start button is clicked 
@@ -148,6 +155,7 @@ const openCell = (col) => {
     return openIndex;
 }
 
+// called after each player move
 const checkForWin = async () => {
     const localCurrentPlayer = currentPlayer;
     
@@ -186,4 +194,7 @@ const checkForWin = async () => {
             }
         }
     }
+
+    // diagonal win check
+    // there are six possible diagonals in each direction... twelve hard coded checks?
 }
