@@ -1,19 +1,21 @@
-// global constants
-let maxCols = 7;
-let maxRows = 6;
+// Global Constants
+const maxCols = 7;
+const maxRows = 6;
 
-// global variables
+// Global Variables
 let inGame = false;
-let playerWon = false;
 let currentPlayer = 1;
 let gameBoard = []; 
 let colsFull = [];
 
+
+// Main
 window.onload = () => {
     initializeBoard();
 }
 
-// set up board and buttons after page load
+
+// Set up board and buttons after page load
 const initializeBoard = () => {
     // create columns
     for (let i = 0; i < maxCols; i++) {
@@ -29,7 +31,8 @@ const initializeBoard = () => {
     document.getElementById("quit-btn").addEventListener("click", quitGame);
 }
 
-// begin a new game
+
+// Begin new game
 const startGame = () => {
     // set global variables
     inGame = true;
@@ -50,7 +53,8 @@ const startGame = () => {
     }
 }
 
-// quit the game
+
+// Quit the game
 const quitGame = () => {
     // set global variables
     inGame = false;
@@ -69,19 +73,10 @@ const quitGame = () => {
     } 
 }
 
-// take player turn
+
+// Take player turn
 const playerMove = (col) => {
     if (inGame && colsFull[col] === false) {
-        let openIndex = openCell(col);
-        
-        // update board front end
-        pieceDrop(col, openIndex);
-
-        // update board back end
-        if (colsFull[col] === false) {
-            gameBoard[col][openIndex] = currentPlayer;
-        }
-
         // update current player display
         if (currentPlayer === 1) {
             document.getElementById("p1-turn-dot").style.backgroundColor = "white";
@@ -90,8 +85,13 @@ const playerMove = (col) => {
             document.getElementById("p1-turn-dot").style.backgroundColor = "palevioletred";
             document.getElementById("p2-turn-dot").style.backgroundColor = "white";
         }
+        
+        // update board front end and back end
+        let openIndex = openCell(col);
+        pieceDrop(col, openIndex);
+        gameBoard[col][openIndex] = currentPlayer;
 
-        // check for player win
+        // check win conditions
         checkForWin();
 
         // switch current player 
@@ -103,38 +103,8 @@ const playerMove = (col) => {
     }
 }
 
-// handle front end during player turn
-const pieceDrop = async (col, openIndex) => {
-    let localCurrentPlayer = currentPlayer;
-    
-    // piece drop animation
-    for (let j = 0; j < maxRows; j++) {
-        const cell = document.getElementById(`cell-${col}-${j}`);
-        if (gameBoard[col][j] === null) {
-            // set cells to correct color
-            if (localCurrentPlayer === 1) {
-                cell.style.backgroundColor = "palevioletred";
-            } else {
-                cell.style.backgroundColor = "yellow";
-            }
-            if (j !== openIndex) {
-                // sleep, then reset background color
-                await new Promise(resolve => setTimeout(resolve, 110))
-                cell.style.backgroundColor = "darkseagreen";
-            }
-        }   
-    }
-    
-    // set filled cell to player color 
-    let currCell = document.getElementById(`cell-${col}-${openIndex}`);
-    if (localCurrentPlayer === 1) {
-        currCell.style.backgroundColor = "palevioletred";
-    } else {
-        currCell.style.backgroundColor = "yellow";
-    }
-}
 
-// return next open board cell in column, given column index
+// Given column index, return next open board cell in column
 const openCell = (col) => {
     let cell = gameBoard[col][0];
     let openIndex = 0;
@@ -145,7 +115,7 @@ const openCell = (col) => {
         }
     }
     
-    // if last piece in col was just placed, mark col as full
+    // if column is now full, update full col array
     if (openIndex === 0 && colsFull[col] === false) {
         colsFull[col] = true;
     }
@@ -153,24 +123,52 @@ const openCell = (col) => {
     return openIndex;
 }
 
-// check win conditions
+
+// Given current col and open index, run animation and update front end board
+const pieceDrop = async (col, openIndex) => {
+    let player = currentPlayer;
+    
+    // piece drop animation
+    for (let j = 0; j < maxRows; j++) {
+        const cell = document.getElementById(`cell-${col}-${j}`);
+        if (gameBoard[col][j] === null) {
+            if (player === 1) {
+                cell.style.backgroundColor = "palevioletred";
+            } else {
+                cell.style.backgroundColor = "yellow";
+            }
+            if (j !== openIndex) {
+                await new Promise(resolve => setTimeout(resolve, 110))
+                cell.style.backgroundColor = "darkseagreen";
+            }
+        }   
+    }
+    
+    // set piece color in board cell
+    let currCell = document.getElementById(`cell-${col}-${openIndex}`);
+    if (player === 1) {
+        currCell.style.backgroundColor = "palevioletred";
+    } else {
+        currCell.style.backgroundColor = "yellow";
+    }
+}
+
+
+// Check win conditions and handle wins
 const checkForWin = async () => {
-    const localCurrentPlayer = currentPlayer;
+    const player = currentPlayer;
     
     // vertical win check
     for (let i = 0; i < maxCols; i++) {
         let vertConsec = 0;
         for (let j = 0; j < maxRows; j++) {
-            if (gameBoard[i][j] === localCurrentPlayer) {
+            if (gameBoard[i][j] === player) {
                 vertConsec++;
             } else {
                 vertConsec = 0;
             }
             if (vertConsec >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 400))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
@@ -179,36 +177,30 @@ const checkForWin = async () => {
     for (let j = 0; j < maxRows; j++) {
         let horizConsec = 0;
         for (let i = 0; i < maxCols; i++) {
-            if (gameBoard[i][j] === localCurrentPlayer) {
+            if (gameBoard[i][j] === player) {
                 horizConsec++;
             } else {
                 horizConsec = 0;
             }
             if (horizConsec >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 700))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
     
-    // bottom left to upper right diagonal win check
+    // diagonal win check 1
     
     // first half (upper triangle)
     for (let i = 0; i < maxCols; i++) {
         let diagConsec1 = 0;
         for (let j = i; j >= 0 && i - j < maxRows; j--) {
-            if (gameBoard[i][i - j] === localCurrentPlayer) {
+            if (gameBoard[i][i - j] === player) {
                 diagConsec1++;
             } else {
                 diagConsec1 = 0;
             }
             if (diagConsec1 >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 500))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
@@ -216,36 +208,30 @@ const checkForWin = async () => {
     for (let i = 1; i < maxCols; i++) {
         let diagConsec1 = 0;
         for (let j = maxRows - 1, k = 0; j >= 0 && i + k < maxCols; j--, k++) {
-            if (gameBoard[i + k][j] === localCurrentPlayer) {
+            if (gameBoard[i + k][j] === player) {
                 diagConsec1++;
             } else {
                 diagConsec1 = 0;
             }
             if (diagConsec1 >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 500))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
     
-    // bottom right to upper left diagonal win check
+    // diagonal win check 2
     
     // first half (upper triangle)
     for (let i = maxRows; i >= 0; i--) {
         let diagConsec2 = 0;
         for (let j = 0; i + j < maxCols; j++) {
-            if (gameBoard[i + j][j] === localCurrentPlayer) {
+            if (gameBoard[i + j][j] === player) {
                 diagConsec2++;
             } else {
                 diagConsec2 = 0;
             }
             if (diagConsec2 >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 500))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
@@ -253,17 +239,23 @@ const checkForWin = async () => {
     for (let j = 1; j < maxRows; j++) {
         let diagConsec2 = 0;
         for (let i = 0, k = 0; i < maxCols && j + k < maxRows; i++, k++) {
-            if (gameBoard[i][j + k] === localCurrentPlayer) {
+            if (gameBoard[i][j + k] === player) {
                 diagConsec2++;
             } else {
                 diagConsec2 = 0;
             }
             if (diagConsec2 >= 4) {
-                inGame = false;
-                await new Promise(resolve => setTimeout(resolve, 500))
-                alert("Congratulations! Player " + localCurrentPlayer + " wins!");
-                quitGame();
+                handleWin(player);
             }
         }
     }
+}
+
+
+// Announce player win and reset game
+const handleWin = async (player) => {
+    inGame = false;
+    await new Promise(resolve => setTimeout(resolve, 600))
+    alert("Congratulations! Player " + player + " wins!");
+    quitGame();
 }
