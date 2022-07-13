@@ -17,8 +17,16 @@ class Game {
     initializeBoard = () => {
         // create columns
         for (let i = 0; i < this.maxCols; i++) {
-            document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}" onclick="playerMove(${i})"></div>`;
+            document.getElementById("game-board").innerHTML += `<div class="col" id="col-${i}"></div>`;
         }
+        
+        // add column listeners
+        for (let i = 0; i < this.maxCols; i++) {
+            const currCol = document.getElementById(`col-${i}`);
+            currCol.addEventListener("click", this.playerMove);
+            currCol.param = i;
+        }
+        
         // create board cells within columns
         for (let i = 0; i < this.maxCols; i++) {
             for (let j = 0; j < this.maxRows; j++) {
@@ -73,7 +81,9 @@ class Game {
 
 
     // Take player turn
-    playerMove = (col) => {
+    playerMove = (e) => {
+        let col = e.currentTarget.param;
+
         if (this.inGame && this.colsFull[col] === false) {
             // update current player display
             if (this.currPlayer === 1) {
@@ -85,12 +95,12 @@ class Game {
             }
             
             // update board front end and back end
-            let openIndex = openCell(col);
-            pieceDrop(col, openIndex);
+            let openIndex = this.openCell(col);
+            this.pieceDrop(col, openIndex);
             this.gameBoard[col][openIndex] = this.currPlayer;
 
             // check win conditions
-            checkForWin();
+            this.checkForWin();
 
             // switch current player 
             if (this.currPlayer === 1) {
@@ -165,9 +175,7 @@ class Game {
                 } else {
                     vertConsec = 0;
                 }
-                if (vertConsec >= 4) {
-                    handleWin(player);
-                }
+                if (vertConsec >= 4) { this.handleWin(player); }
             }
         }
         
@@ -180,9 +188,7 @@ class Game {
                 } else {
                     horizConsec = 0;
                 }
-                if (horizConsec >= 4) {
-                    handleWin(player);
-                }
+                if (horizConsec >= 4) { this.handleWin(player); }
             }
         }
         
@@ -192,28 +198,25 @@ class Game {
         for (let i = 0; i < this.maxCols; i++) {
             let diagConsec1 = 0;
             for (let j = i; j >= 0 && i - j < this.maxRows; j--) {
-                if (this.gameBoard[i][i - j] === player) {
+                if (this.gameBoard[i - j][j] === player) {
                     diagConsec1++;
                 } else {
                     diagConsec1 = 0;
                 }
-                if (diagConsec1 >= 4) {
-                    handleWin(player);
-                }
+                if (diagConsec1 >= 4) { this.handleWin(player); }
             }
         }
         // second half (lower triangle)
         for (let i = 1; i < this.maxCols; i++) {
             let diagConsec1 = 0;
             for (let j = this.maxRows - 1, k = 0; j >= 0 && i + k < this.maxCols; j--, k++) {
+                let sum = i + k;
                 if (this.gameBoard[i + k][j] === player) {
                     diagConsec1++;
                 } else {
                     diagConsec1 = 0;
                 }
-                if (diagConsec1 >= 4) {
-                    handleWin(player);
-                }
+                if (diagConsec1 >= 4) { this.handleWin(player); }
             }
         }
         
@@ -223,14 +226,13 @@ class Game {
         for (let i = this.maxRows; i >= 0; i--) {
             let diagConsec2 = 0;
             for (let j = 0; i + j < this.maxCols; j++) {
+                console.log
                 if (this.gameBoard[i + j][j] === player) {
                     diagConsec2++;
                 } else {
                     diagConsec2 = 0;
                 }
-                if (diagConsec2 >= 4) {
-                    handleWin(player);
-                }
+                if (diagConsec2 >= 4) { this.handleWin(player); }
             }
         }
         // second half (lower triangle)
@@ -242,10 +244,8 @@ class Game {
                 } else {
                     diagConsec2 = 0;
                 }
-                if (diagConsec2 >= 4) {
-                    handleWin(player);
-                }
-            }
+                if (diagConsec2 >= 4) { this.handleWin(player); }
+            }   
         }
     }
 
@@ -255,7 +255,7 @@ class Game {
         this.inGame = false;
         await new Promise(resolve => setTimeout(resolve, 600))
         alert("Congratulations! Player " + player + " wins!");
-        quitGame();
+        this.quitGame();
     }
 
 }
