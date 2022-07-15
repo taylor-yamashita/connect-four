@@ -210,7 +210,6 @@ class Game {
         for (let i = 1; i < this.maxCols; i++) {
             let diagConsec1 = 0;
             for (let j = this.maxRows - 1, k = 0; j >= 0 && i + k < this.maxCols; j--, k++) {
-                let sum = i + k;
                 if (this.gameBoard[i + k][j] === player) {
                     diagConsec1++;
                 } else {
