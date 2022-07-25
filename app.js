@@ -98,6 +98,9 @@ class Game {
       // check win conditions
       this.checkForWin()
 
+      // check for tie
+      this.checkForTie() 
+
       // switch current player
       if (this.currPlayer === 1) {
         this.currPlayer = 2
@@ -246,6 +249,22 @@ class Game {
     await new Promise(resolve => setTimeout(resolve, 600))
     window.alert('Congratulations! Player ' + player + ' wins!')
     this.quitGame()
+  }
+
+  // Announce tie and reset game
+  checkForTie = async () => {
+    let tie = true;
+    for (let i = 0; i < this.maxCols; i++) {
+      if (this.colsFull[i] === false) {
+          tie = false;
+      }
+    }
+    if (tie) {
+      this.inGame = false
+      await new Promise(resolve => setTimeout(resolve, 600))
+      window.alert("It's a tie!")
+      this.quitGame()
+    }
   }
 }
 
