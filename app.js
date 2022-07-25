@@ -99,7 +99,7 @@ class Game {
       this.checkForWin()
 
       // check for tie
-      this.checkForTie() 
+      this.checkForTie()
 
       // switch current player
       if (this.currPlayer === 1) {
@@ -253,10 +253,10 @@ class Game {
 
   // Announce tie and reset game
   checkForTie = async () => {
-    let tie = true;
+    let tie = true
     for (let i = 0; i < this.maxCols; i++) {
       if (this.colsFull[i] === false) {
-          tie = false;
+        tie = false
       }
     }
     if (tie) {

@@ -1,0 +1,43 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/connect-four-taylor
+    docker:
+      - image: cimg/node:18.4.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - connect-four-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install NPM Dependencies via Yarn
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: connect-four-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+      - persist_to_workspace:
+          root: '~/connect-four-taylor'
+          paths: '*'
+
+  lint:
+    working_directory: ~/connect-four-taylor
+    docker:
+      - image: cimg/node:18.4.0
+    steps:
+      - attach_workspace:
+          at: '~/connect-four-taylor'
+      - run:
+          name: Run standard js linter
+          command: yarn standard
+
+workflows:
+  version: 2
+  build_accept_deploy:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
